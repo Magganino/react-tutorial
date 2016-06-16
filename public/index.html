@@ -15,12 +15,26 @@
     <div id="content"></div>
     <script type="text/babel">
 
+    //MOCK DATA
+    var mockData = [
+      {
+        id: 1, 
+        author: "Pelle Jöns", 
+        text: "The first comment!"
+      },
+      {
+        id: 2, 
+        author: "Lisa Svensson", 
+        text: "Wow, another comment!"
+      }
+    ];
+
       var CommentBox = React.createClass({
         render: function() {
           return (
             <div className="commentBox">
               <h1>Comments</h1>
-              <CommentList />
+              <CommentList data={this.props.data} />
               <CommentForm />
             </div>
           );
@@ -29,10 +43,16 @@
 
       var CommentList = React.createClass({
         render: function() {
+          var commentNodes = this.props.data.map(function(comment) {
+            return (
+              <Comment author={comment.author} key={comment.id}>
+                {comment.text}
+              </Comment>
+            );
+          });
           return (
             <div className="commentList">
-              <Comment author="Pelle Jöns">The first comment!</Comment>
-              <Comment author="Lisa Svensson">Wow, another comment!</Comment>
+              {commentNodes}
             </div>
           );
         }
@@ -54,7 +74,7 @@
           var rawMarkup = md.render(this.props.children.toString());
           return {__html: rawMarkup};
         },
-        
+
         render: function() {
           return(
             <div className="comment">
@@ -68,7 +88,7 @@
       });
 
       ReactDOM.render(
-        <CommentBox />,
+        <CommentBox data={mockData} />,
         document.querySelector("#content")
       );
 
