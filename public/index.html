@@ -15,26 +15,16 @@
     <div id="content"></div>
     <script type="text/babel">
 
-    //MOCK DATA
-    var mockData = [
-      {
-        id: 1, 
-        author: "Pelle Jöns", 
-        text: "The first comment!"
-      },
-      {
-        id: 2, 
-        author: "Lisa Svensson", 
-        text: "Wow, another comment!"
-      }
-    ];
-
       var CommentBox = React.createClass({
+        // Executes exactly once during the lifecycle of the component and 
+        // sets up the initial state of the component.
         getInitialState: function() {
           return {
             data: []
           }
         },
+        // Method that is called automatically by React when a component
+        // is rendered for the first time.
         componentDidMount: function() {
           //Ajax call with jQuery
           $.ajax({
@@ -42,6 +32,7 @@
             dataType: "json",
             cache: false,
             success: function(data) {
+              // When the state updates, the component re-renders itself.
               this.setState({data: data});
             }.bind(this),
             error: function(xhr, status, err) {
