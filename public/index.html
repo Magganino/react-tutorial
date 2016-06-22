@@ -16,16 +16,7 @@
     <script type="text/babel">
 
       var CommentBox = React.createClass({
-        // Executes exactly once during the lifecycle of the component and 
-        // sets up the initial state of the component.
-        getInitialState: function() {
-          return {
-            data: []
-          }
-        },
-        // Method that is called automatically by React when a component
-        // is rendered for the first time.
-        componentDidMount: function() {
+        loadCommentsFromServer: function() {
           //Ajax call with jQuery
           $.ajax({
             url: this.props.url,
@@ -39,6 +30,20 @@
               console.error(this.props.url, status, err.toString());
             }.bind(this)
           });
+        },
+        // Executes exactly once during the lifecycle of the component and 
+        // sets up the initial state of the component.
+        getInitialState: function() {
+          return {
+            data: []
+          }
+        },
+        // Method that is called automatically by React when a component
+        // is rendered for the first time.
+        componentDidMount: function() {
+          this.loadCommentsFromServer();
+          // Start simple polling
+          setInterval(this.loadCommentsFromServer, this.props.pollInterval);
         },
         render: function() {
           return (
@@ -98,7 +103,7 @@
       });
 
       ReactDOM.render(
-        <CommentBox url="/api/comments" />,
+        <CommentBox url="/api/comments" pollInterval={3000}/>,
         document.querySelector("#content")
       );
 
